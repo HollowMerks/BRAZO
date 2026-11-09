@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+*.tmp
+
+# Modelo 3D de Emre Kalem (MakerWorld, «Standard Digital File License»): no se
+# redistribuye. Cada uno lo descarga de MakerWorld y genera las mallas con
+#   python3 simulador/herramientas/exportar_modelo.py modelo/fuente/brazo.3mf
+modelo/fuente/*.3mf
+simulador/web/modelo/*.bin
+modelo/vista-previa-armado.png

@@ -1,0 +1,58 @@
+{
+  "fuente": "Robotic Arm with Servo & Arduino (Emre Kalem, MakerWorld)",
+  "piezas": [
+    "caja",
+    "torreta",
+    "brazo",
+    "antebrazo",
+    "muneca",
+    "mano_sup",
+    "mano_inf",
+    "dedo_engranaje",
+    "eslabon",
+    "dedo",
+    "engranaje"
+  ],
+  "medidas": {
+    "hombro_a_codo": [
+      47.5,
+      194.27
+    ],
+    "eje_a_eje": 199.99,
+    "codo_a_muneca": 139.99,
+    "brazo_recto": 172.12,
+    "corte_brazo": 86.0,
+    "caja": {
+      "largo": 210.0,
+      "ancho": 120.0,
+      "alto": 70.0
+    },
+    "servo_hombro": {
+      "x": -19.75,
+      "y": 40.0,
+      "pared": [
+        19.14,
+        30.7
+      ]
+    },
+    "mano": {
+      "origen": 63.5,
+      "engranaje": [
+        19.27,
+        8.0
+      ],
+      "eslabon": [
+        7.95,
+        19.3
+      ],
+      "brazo": 20.0,
+      "dedo_angulo": -45.0,
+      "engranaje_servo": [
+        4.0,
+        5.3
+      ],
+      "cerrada": 17.5,
+      "abierta": 85.0
+    }
+  }
+}

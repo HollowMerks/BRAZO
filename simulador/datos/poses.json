@@ -1,0 +1,10 @@
+{
+  "recoger": {
+    "pulsos": {
+      "hombro_izq": 1440,
+      "hombro_der": 1504,
+      "codo": 700
+    },
+    "nota": "Marcada por el usuario el 28/10: hombros inclinados hacia adelante, antebrazo levantado al máximo del codo. En pulsos porque aún no hay calibración; pasarla a ángulos cuando la haya."
+  }
+}

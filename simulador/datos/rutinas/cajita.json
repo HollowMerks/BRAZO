@@ -1,0 +1,69 @@
+{
+  "pasos": [
+    {
+      "nombre": "Levantar el antebrazo",
+      "hombro": 90.0,
+      "codo": -90.0
+    },
+    {
+      "nombre": "Girar hacia la cajita",
+      "giro": -40.0
+    },
+    {
+      "nombre": "Ir encima de la cajita, abierta",
+      "hombro": 80.4,
+      "codo": -86.7,
+      "muneca": -83.7,
+      "garra": 100.0
+    },
+    {
+      "nombre": "Bajar hasta la cajita",
+      "hombro": 73.5,
+      "codo": -101.6,
+      "muneca": -61.9
+    },
+    {
+      "nombre": "Cerrar la garra (agarra la cajita)",
+      "garra": 60.0,
+      "espera": 0.5
+    },
+    {
+      "nombre": "Levantar la cajita",
+      "hombro": 80.4,
+      "codo": -86.7,
+      "muneca": -83.7
+    },
+    {
+      "nombre": "Girar al otro lado",
+      "giro": 40.0
+    },
+    {
+      "nombre": "Bajar a dejarla",
+      "hombro": 73.5,
+      "codo": -101.6,
+      "muneca": -61.9
+    },
+    {
+      "nombre": "Abrir la garra (la suelta)",
+      "garra": 100.0,
+      "espera": 0.5
+    },
+    {
+      "nombre": "Subir",
+      "hombro": 80.4,
+      "codo": -86.7,
+      "muneca": -83.7
+    },
+    {
+      "nombre": "Cerrar la garra y centrar",
+      "giro": 0.0,
+      "garra": 0.0
+    },
+    {
+      "nombre": "Volver al reposo",
+      "hombro": 90.0,
+      "codo": -180.0,
+      "muneca": 90.0
+    }
+  ]
+}

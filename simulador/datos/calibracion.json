@@ -1,0 +1,47 @@
+{
+  "puntos": {
+    "hombro_izq": [
+      [
+        1411.0,
+        45.0
+      ],
+      [
+        1891.0,
+        90.0
+      ]
+    ],
+    "hombro_der": [],
+    "codo": [
+      [
+        700.0,
+        -58.1
+      ],
+      [
+        2000.0,
+        -180.0
+      ]
+    ],
+    "giro": []
+  },
+  "limites": {
+    "hombro_izq": [
+      null,
+      null
+    ],
+    "hombro_der": [
+      null,
+      null
+    ],
+    "codo": [
+      null,
+      null
+    ],
+    "giro": [
+      null,
+      null
+    ]
+  },
+  "notas": {
+    "codo": "2000 \u00b5s = \u2212180\u00b0 observado el 28/10 (hombros verticales, antebrazo recto hacia abajo). 700 \u00b5s estimado con la escala de los hombros (0.0938 \u00b0/\u00b5s, mismo modelo MG995) y el sentido observado (bajar \u00b5s levanta el antebrazo). Reemplazar con una medida real."
+  }
+}

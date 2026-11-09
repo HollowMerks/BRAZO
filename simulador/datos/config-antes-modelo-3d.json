@@ -1,0 +1,27 @@
+{
+  "altura_hombro": 100.0,
+  "brazo_recto": 145.0,
+  "brazo_inclinado": 70.0,
+  "brazo_angulo": 65.0,
+  "largo_antebrazo": 155.0,
+  "grosor_brazo": 50.0,
+  "grosor_antebrazo": 40.0,
+  "base_adelante": 127.0,
+  "base_atras": 93.0,
+  "base_alto": 68.0,
+  "margen": 15.0,
+  "hombro": {
+    "minimo": 15.0,
+    "maximo": 90.0,
+    "vmax": 35.0,
+    "amax": 70.0
+  },
+  "codo": {
+    "minimo": -180.0,
+    "maximo": -58.1,
+    "vmax": 35.0,
+    "amax": 70.0
+  },
+  "reposo_hombro": 90.0,
+  "reposo_codo": -180.0
+}

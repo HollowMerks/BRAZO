@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e1013">
+<title>Brazo · simulador</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<header class="barra">
+  <div class="marca">Brazo <span>hombros + codo</span></div>
+  <div id="conexion" class="chip">Conectando…</div>
+</header>
+
+<main class="app">
+  <section class="escena">
+    <div class="modo vistas" id="vistas" role="radiogroup" aria-label="Vista">
+      <button type="button" data-vista="3d" class="activo" role="radio" aria-checked="true">3D</button>
+      <button type="button" data-vista="lateral" role="radio" aria-checked="false">Lateral</button>
+    </div>
+    <div class="vista">
+      <div id="vista3d" class="vista3d" aria-label="Vista 3D del brazo"><p class="cargando">Cargando el modelo 3D…</p></div>
+      <svg id="lienzo" role="img" aria-label="Vista lateral del brazo"></svg>
+      <!-- Encima del dibujo: que aparezca o no, no cambia el tamaño de la vista -->
+      <p id="aviso" class="aviso" role="status" hidden></p>
+    </div>
+    <div class="lecturas">
+      <div><span class="et">Hombro</span><b id="lec-hombro">—</b></div>
+      <div><span class="et">Codo</span><b id="lec-codo">—</b></div>
+      <div><span class="et">Holgura</span><b id="lec-holgura">—</b></div>
+    </div>
+    <p class="nota">Posición ordenada (simulada), no medida en el brazo real.</p>
+  </section>
+
+  <section class="mandos">
+    <div class="real" id="real" hidden>
+      <div><b>Brazo real</b><small id="real-estado">apagado</small></div>
+      <button type="button" id="real-btn">Habilitar</button>
+    </div>
+    <p id="real-aviso" class="info malo" hidden></p>
+    <div class="real" id="giro-real" hidden>
+      <div><b>Servo de giro</b><small id="giro-estado">apagado</small></div>
+      <div class="acciones">
+        <button type="button" id="giro-soltar" class="mini">Soltar</button>
+        <button type="button" id="giro-btn">Habilitar</button>
+      </div>
+    </div>
+    <p id="giro-aviso" class="info malo" hidden></p>
+    <div class="modo" id="modo-joy" role="radiogroup" aria-label="Modo de los joysticks">
+      <button type="button" data-modo="articulaciones" class="activo" role="radio" aria-checked="true">Articulaciones</button>
+      <button type="button" data-modo="punta" role="radio" aria-checked="false">Punta</button>
+    </div>
+
+    <div class="joysticks">
+      <div class="joy" id="joy-a"><div class="perilla"></div><span class="nombre">Hombro</span></div>
+      <div class="joy" id="joy-b"><div class="perilla"></div><span class="nombre">Codo</span></div>
+    </div>
+
+    <div class="giro">
+      <label class="deslizador">
+        <span>Giro <small>torreta sobre la caja</small></span><output id="v-giro">—</output>
+        <input type="range" id="s-giro" step="1">
+      </label>
+      <button type="button" id="btn-centrar" class="mini">Centrar</button>
+    </div>
+
+    <div class="giro" id="mano">
+      <label class="deslizador">
+        <span>Muñeca <small>respecto al antebrazo</small></span><output id="v-muneca">—</output>
+        <input type="range" id="s-muneca" step="1" data-articulacion="muneca">
+      </label>
+      <label class="deslizador">
+        <span>Giro de muñeca</span><output id="v-giro_muneca">—</output>
+        <input type="range" id="s-giro_muneca" step="1" data-articulacion="giro_muneca">
+      </label>
+      <label class="deslizador">
+        <span>Garra <small>cerrada → abierta</small></span><output id="v-garra">—</output>
+        <input type="range" id="s-garra" step="1" data-articulacion="garra">
+      </label>
+    </div>
+
+    <div class="botones">
+      <button type="button" id="btn-reposo">Reposo</button>
+      <button type="button" id="btn-detener" class="peligro">Detener</button>
+    </div>
+
+    <details class="panel" id="panel-pose" open>
+      <summary>Ir a una pose</summary>
+      <div class="contenido">
+        <label class="deslizador">
+          <span>Hombro <small>respecto a la mesa</small></span><output id="v-hombro">—</output>
+          <input type="range" id="s-hombro" step="0.5">
+        </label>
+        <label class="deslizador">
+          <span>Codo <small>respecto al brazo</small></span><output id="v-codo">—</output>
+          <input type="range" id="s-codo" step="0.5">
+        </label>
+        <p id="info-plan" class="info"></p>
+        <div class="botones">
+          <button type="button" id="btn-cancelar" disabled>Descartar</button>
+          <button type="button" id="btn-ir" class="principal" disabled>Ir</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="panel" id="panel-rutinas">
+      <summary>Rutinas</summary>
+      <div class="contenido">
+        <div class="fila-rutina">
+          <select id="r-lista" aria-label="Rutina"></select>
+          <button type="button" id="r-nueva" class="mini">Nueva</button>
+          <button type="button" id="r-borrar" class="mini">Borrar</button>
+        </div>
+        <p id="r-estado" class="info">—</p>
+        <ol id="r-pasos" class="puntos pasos-rutina"></ol>
+        <p class="info">Cada paso mueve primero el giro y la mano, y después el brazo. Para no rozar nada, graba un paso por movimiento: subir, girar, bajar.</p>
+        <div class="medida">
+          <label for="r-nombre-paso">Nombre del paso</label>
+          <input id="r-nombre-paso" type="text" maxlength="60" placeholder="p. ej. bajar">
+        </div>
+        <button type="button" id="r-agregar">Agregar la pose actual como paso</button>
+        <p id="r-info" class="info"></p>
+        <div class="botones">
+          <button type="button" id="r-comprobar">Comprobar</button>
+          <button type="button" id="r-guardar">Guardar</button>
+        </div>
+        <div class="botones">
+          <button type="button" id="r-detener" class="peligro">Detener</button>
+          <button type="button" id="r-ejecutar" class="principal">Ejecutar</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="panel" id="panel-cal">
+      <summary>Calibración (brazo real)</summary>
+      <div class="contenido">
+        <p id="cal-estado" class="info">—</p>
+        <div class="modo" id="cal-servos" role="radiogroup" aria-label="Qué calibrar">
+          <button type="button" data-servo="hombros" class="activo">Hombros (los dos)</button>
+          <button type="button" data-servo="codo">Codo</button>
+        </div>
+        <p id="cal-ayuda" class="info"></p>
+        <div class="pulso">
+          <span>Pulso</span><b id="cal-us">—</b><small id="cal-activo">suelto</small>
+        </div>
+        <p class="info">Si está suelto, el primer toque lo activa en el último pulso que tuvo (los engranajes lo mantienen ahí). Tras reiniciar el Nano vuelve a 1472 µs y puede saltar.</p>
+        <div class="pasos">
+          <button type="button" data-paso="-50">−50</button>
+          <button type="button" data-paso="-10">−10</button>
+          <button type="button" data-paso="10">+10</button>
+          <button type="button" data-paso="50">+50</button>
+        </div>
+        <div class="botones">
+          <button type="button" id="cal-activar">Activar aquí</button>
+          <button type="button" id="cal-soltar" class="peligro">Soltar todos</button>
+        </div>
+        <div class="pulso">
+          <span>Límites</span><b id="cal-limites" class="chico">—</b>
+          <button type="button" id="cal-lim-borrar" class="mini">Borrar</button>
+        </div>
+        <div class="botones">
+          <button type="button" id="cal-lim-min">Fijar mínimo aquí</button>
+          <button type="button" id="cal-lim-max">Fijar máximo aquí</button>
+        </div>
+        <div class="medida">
+          <label for="cal-medida">El celular marca</label>
+          <input id="cal-medida" type="number" inputmode="decimal" step="any" placeholder="°">
+          <div class="modo" id="cal-sentido" role="radiogroup" aria-label="Hacia dónde">
+            <button type="button" data-sentido="1" class="activo">Adelante</button>
+            <button type="button" data-sentido="-1">Atrás</button>
+          </div>
+        </div>
+        <p id="cal-resultado" class="info"></p>
+        <button type="button" id="cal-registrar" class="principal">Registrar punto</button>
+        <p class="info">Sin celular: mueve el dibujo («Ir a una pose») hasta que se vea igual que el brazo real y registra su ángulo.</p>
+        <button type="button" id="cal-dibujo">Registrar con el ángulo del dibujo</button>
+        <ul id="cal-puntos" class="puntos"></ul>
+        <p id="cal-ajuste" class="info"></p>
+        <button type="button" id="cal-sostener">Sostener hombros en 90° (calibrado)</button>
+        <div class="pulso">
+          <span>Inicio</span><b id="cal-inicio" class="chico">—</b>
+        </div>
+        <p class="info">Al encender, el Nano lleva el brazo solo a esta pose. Antes de apagar, usa «Ir a inicio» para que al encender no tenga que saltar.</p>
+        <div class="botones">
+          <button type="button" id="cal-inicio-guardar">Guardar pose actual como inicio</button>
+          <button type="button" id="cal-inicio-ir">Ir a inicio</button>
+        </div>
+      </div>
+    </details>
+
+    <details class="panel">
+      <summary>Medidas y límites</summary>
+      <form id="form-medidas" class="contenido">
+        <p class="info">Medidas del modelo 3D impreso. El eje del hombro respecto al eje de giro está estimado sobre fotos. Si el servo de giro gira al revés del dibujo, cambia de signo sus µs por grado.</p>
+        <div id="campos"></div>
+        <button type="button" id="btn-reposo-aqui">Usar la pose actual como reposo</button>
+        <p id="info-medidas" class="info"></p>
+        <button type="submit" class="principal">Guardar</button>
+      </form>
+    </details>
+  </section>
+</main>
+
+<script>window.INICIAL = /*INICIAL*/null;</script>
+<script type="importmap">{"imports": {"three": "./vendor/three.module.min.js"}}</script>
+<script src="app.js"></script>
+<script type="module" src="vista3d.js"></script>
+</body>
+</html>
