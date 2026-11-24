@@ -80,8 +80,8 @@ Lo que funciona: simulador completo (3D, protección, joysticks, giro, garra, ru
 firmware de 4 servos y puente con el brazo real.
 
 **Pendiente o sin resolver:**
-1. **Hombro derecho:** en la última sesión (06/11) no respondía, aunque los pulsos salían
-   bien del Nano. El izquierdo quedó **desacoplado** (sin su brazo de servo). Revisar
+1. **Hombro derecho:** el 06/11 y otra vez el 20/11 no respondía, aunque los pulsos
+   salían bien del Nano. El izquierdo quedó **desacoplado** (sin su brazo de servo). Revisar
    cable de A2, alimentación y el servo.
 2. **Regulador:** su salida variaba entre 6 y 8 V. Revisarlo o cambiarlo antes de usar el
    brazo; con la garra conectada es crítico.
@@ -93,9 +93,13 @@ firmware de 4 servos y puente con el brazo real.
      izquierdo); el punto de 45° es estimado.
    - Codo: 2000 µs = colgando (−180°) es medido; 700 µs = −58,1° es estimado.
    - Topes de pulso sin marcar. Giro sin calibrar.
-5. **La garra** solo existe en el simulador: falta agregar sus 3 MG90S al firmware
-   (propuesta: D10, D11 y D12). Si no está montada, desactivar «Garra montada» en
-   «Medidas y límites», para que no frene de más.
+5. **La garra** solo existe en el simulador: falta agregar sus 3 MG90S a `BrazoNano`.
+   Pines elegidos: **D10 muñeca, D11 cuello (giro de muñeca), D12 agarre**. Si no está
+   montada, desactivar «Garra montada» en «Medidas y límites», para que no frene de más.
+   Prueba del 20/11 con `firmware/GarraPrueba` (sin el brazo): la muñeca y el cuello se
+   mueven; **el agarre nunca se vio moverse**, aunque el Nano confirmaba los pulsos en
+   D12 y la garra estaba «tensa». Falta cambiar los conectores (el agarre en D10) para
+   saber si falla el servo o el pin, y medir los topes de cada servo para BrazoNano 7.
 6. **La pieza gris** se acortó cortándola por la mitad: unos 50 mm menos, estimado sobre
    fotos. Medir de eje a eje con regla y corregir «Pieza gris: eje del hombro → doblez».
 
@@ -257,7 +261,10 @@ Pines: hombro izquierdo A1, hombro derecho A2, codo A0, **giro D9**. Se usa con
 ## Garra (06/11)
 
 La garra del modelo 3D ya está en el simulador: tres MG90S para **muñeca**, **giro de muñeca**
-y **apertura**. Todavía no se mueve en el brazo real: falta el firmware, con sus pines.
+y **apertura**. Todavía no se mueve en el brazo real: falta sumarla a `BrazoNano`. Para
+probar los servos sueltos está `firmware/GarraPrueba` (D10/D11/D12; arranca sin señal;
+órdenes por serie a 115200 en la cabecera del .ino; ojo: ese Nano tiene el bootloader
+nuevo, `cpu=atmega328`, no `atmega328old`).
 
 - **Cómo va armada** (medido en las piezas, ver `herramientas/exportar_modelo.py`):
   - La U de la muñeca (Bilek) abraza la punta del antebrazo, con un pasador de 6,8 mm en

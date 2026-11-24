@@ -14,6 +14,17 @@
   "giro_centro_us": 1500.0,
   "giro_us_por_grado": 11.11,
   "margen": 15.0,
+  "garra_montada": true,
+  "mano_base": 27.5,
+  "mano_palma": 88.5,
+  "mano_largo": 144.0,
+  "mano_radio": 27.0,
+  "garra_ancho_cerrada": 30.5,
+  "garra_ancho_abierta": 44.5,
+  "garra_apertura": 29.0,
+  "muneca": 89.0,
+  "giro_muneca": 51.00317717700731,
+  "garra": 54.44,
   "hombro": {
     "minimo": 0.0,
     "maximo": 123.0,
@@ -32,6 +43,24 @@
     "vmax": 10.0,
     "amax": 20.0
   },
+  "lim_muneca": {
+    "minimo": -90.0,
+    "maximo": 90.0,
+    "vmax": 60.0,
+    "amax": 120.0
+  },
+  "lim_giro_muneca": {
+    "minimo": -90.0,
+    "maximo": 90.0,
+    "vmax": 60.0,
+    "amax": 120.0
+  },
+  "lim_garra": {
+    "minimo": 0.0,
+    "maximo": 100.0,
+    "vmax": 100.0,
+    "amax": 300.0
+  },
   "reposo_hombro": 90.0,
-  "reposo_codo": -180.0
+  "reposo_codo": -179.3
 }
