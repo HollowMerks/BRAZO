@@ -265,15 +265,32 @@ class Vista {
   }
 }
 
+// Por una red lenta (p. ej. la página por un túnel SSH en una WiFi cargada) una
+// descarga puede cortarse o quedar colgada: se reintenta antes de dar la vista 3D
+// por perdida. Un 404 no se reintenta: es que no se exportó el modelo (README).
+async function bajar(url, intentos = 4) {
+  for (let i = 1; ; i++) {
+    const corte = new AbortController();
+    const reloj = setTimeout(() => corte.abort(), 15000);
+    try {
+      const r = await fetch(url, { signal: corte.signal });
+      if (r.status === 404) throw Object.assign(new Error(`falta «${url}»`), { definitivo: true });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return await r.arrayBuffer();
+    } catch (e) {
+      if (e.definitivo || i >= intentos) throw new Error(e.definitivo ? e.message : `no se pudo bajar «${url}» (${e.message})`);
+      await new Promise((listo) => setTimeout(listo, 500 * 2 ** (i - 1)));
+    } finally {
+      clearTimeout(reloj);
+    }
+  }
+}
+
 async function arrancar() {
   const caja = document.getElementById("vista3d");
   try {
-    const info = await (await fetch("modelo/piezas.json")).json();
-    const buffers = await Promise.all(info.piezas.map(async (nombre) => {
-      const r = await fetch(`modelo/${nombre}.bin`);
-      if (!r.ok) throw new Error(`falta la pieza «${nombre}»`);
-      return r.arrayBuffer();
-    }));
+    const info = JSON.parse(new TextDecoder().decode(await bajar("modelo/piezas.json")));
+    const buffers = await Promise.all(info.piezas.map((nombre) => bajar(`modelo/${nombre}.bin`)));
     const mallas = Object.fromEntries(info.piezas.map((nombre, i) => [nombre, leerMalla(buffers[i])]));
     window.vista3d = new Vista(caja, new Brazo(mallas, info.medidas));
     window.dispatchEvent(new Event("vista3d-lista"));
